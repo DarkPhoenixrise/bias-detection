@@ -82,6 +82,7 @@ Bias detection is inherently subjective
 Results depend heavily on question design
 Graph heuristics may not capture all real-world biases
 Not suitable for high-stakes decisions without validation
+
 🔮 Future Improvements
 Add ML-based anomaly detection
 Improve graph scoring metrics
