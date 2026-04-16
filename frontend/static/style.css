@@ -128,3 +128,81 @@ section{padding:6rem 2rem}
 
 footer{text-align:center;padding:2.5rem 2rem;color:var(--mut);font-size:0.82rem;border-top:1px solid var(--b1)}
 footer em{color:var(--acc);font-style:normal}
+/* =========================
+   📱 MOBILE NAV FIX
+   ========================= */
+@media (max-width: 768px){
+
+  nav{
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:0.8rem 1rem;
+    gap:0.5rem;
+  }
+
+  .brand{
+    order:-1;
+    text-align:center;
+    font-size:1.2rem;
+  }
+
+  .navl{
+    flex-direction:column;
+    align-items:center;
+    gap:0.4rem;
+  }
+
+  .navl li{
+    width:100%;
+    text-align:center;
+  }
+
+  .navl a{
+    display:block;
+    width:100%;
+    padding:0.5rem 0;
+    font-size:0.85rem;
+  }
+}
+.team-section {
+  padding: 90px 0;
+  background: linear-gradient(180deg, #0f0f14, #14141c);
+  text-align: center;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+  margin-top: 50px;
+}
+
+.team-card {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 28px;
+  text-align: left;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.team-card:hover {
+  transform: translateY(-6px);
+  border-color: #9d7ff4;
+  box-shadow: 0 10px 30px rgba(157,127,244,0.15);
+}
+
+.team-card h3 {
+  margin-bottom: 6px;
+  font-size: 1.2rem;
+}
+
+.role {
+  font-size: 0.85rem;
+  color: #9d7ff4;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
