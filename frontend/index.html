@@ -36,8 +36,65 @@
   </section>
 
   <div class="div"></div>
+  
+  <!-- WHY THIS MATTERS -->
+  <section class="why-section" id="why">
+    <div class="wrap">
+      <div class="eye">Why It Matters</div>
+      <h2 class="sh">Understanding Your Decisions Beyond Intuition</h2>
+
+      <p class="sd" style="max-width:720px;margin:auto">
+        Human decisions often feel logical, but hidden inconsistencies can exist beneath the surface.
+        This system reveals whether your preferences follow a consistent structure — or if subtle
+        contradictions are shaping your choices.
+      </p>
+
+      <div class="why-grid">
+
+        <!-- Card 1 -->
+        <div class="why-card">
+          <h3>Hidden Inconsistencies</h3>
+          <p>
+            You may prefer A over B and B over C, but still choose C over A.
+            These contradictions are not obvious, yet they influence real-world decisions.
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="why-card">
+          <h3>Real-World Impact</h3>
+          <p>
+            Inconsistent preferences can lead to poor financial choices, risky decisions,
+            and unstable long-term planning — especially under uncertainty.
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="why-card">
+          <h3>Beyond Opinion</h3>
+          <p>
+            This is not about what you choose, but how consistently you choose.
+            The system evaluates the structure of your thinking, not your answers.
+          </p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="why-card">
+          <h3>Measurable Rationality</h3>
+          <p>
+            By modeling your preferences as a graph, we can quantify inconsistency
+            and identify patterns that are otherwise invisible.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  
+
 
   <!-- HOW -->
+
   <section class="how-bg" id="how">
     <div class="wrap">
       <div class="eye">The Model</div>
@@ -73,112 +130,276 @@
       </div>
     </div>
   </section>
-  <section class="theory-intro" id="theory">
-    <div class="wrap">
-      <div class="eye">Foundations</div>
-      <h2 class="sh">How This Model Works</h2>
+<section class="theory-intro" id="theory">
+  <div class="wrap">
 
-      <p class="sd" style="max-width:700px;margin:auto">
-        This system is built on mathematical frameworks that model how humans make decisions.
-        Your choices are structured and analyzed using formal logic to detect inconsistencies.
-      </p>
+    <div class="eye">Foundations</div>
+    <h2 class="sh">The Theory Behind the Model</h2>
 
-      <div class="theory-cards">
+    <p class="sd intro-text">
+      This system is built on two fundamental mathematical frameworks that describe how decisions
+      can be structured and analyzed. Together, they allow us to model preferences and detect
+      inconsistencies in a rigorous way.
+    </p>
 
-        <!-- Graph Theory Card -->
-        <div class="tcard">
-          <h3>Graph Theory</h3>
-          <p>
-            Your preferences are represented as a network of connected choices.
-            Each decision forms a directional relationship between options.
-          </p>
-          <a href="#graph-theory" class="tlink">Explore Graph Model →</a>
+    <div class="theory-split">
+
+      <!-- LEFT SIDE -->
+      <div class="theory-block">
+        <div class="tlabel">01</div>
+        <h3>Graph Theory</h3>
+
+        <p>
+          Your preferences are modeled as a directed network where each option is a node and
+          each decision creates a directional connection between them.
+        </p>
+
+        <div class="mini-eq">G = (V, E)</div>
+
+        <p class="mut">
+          This structure allows us to analyze relationships between choices and detect
+          patterns such as cycles and dominance.
+        </p>
+      </div>
+
+      <!-- RIGHT SIDE -->
+      <div class="theory-block">
+        <div class="tlabel">02</div>
+        <h3>Decision Theory</h3>
+
+        <p>
+          Your choices define a preference ordering over available options.
+          A rational system must follow logical consistency rules.
+        </p>
+
+        <div class="mini-eq">A ≻ B ∧ B ≻ C ⇒ A ≻ C</div>
+
+        <p class="mut">
+          When this rule is violated, contradictions emerge — which we interpret as bias
+          in the decision process.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+  <section class="graph-intuition" id="graph-theory">
+  <div class="wrap">
+
+    <div class="eye">Graph Theory</div>
+    <h2 class="sh">Think of Your Decisions as a Network</h2>
+
+    <p class="sd g-intro">
+      Instead of isolated choices, imagine every decision you make as part of a connected system.
+      Each option is a point, and every preference you express creates a link between them.
+      Over time, these links form a structure — your personal decision network.
+    </p>
+
+    <div class="g-visual">
+
+      <!-- LEFT TEXT FLOW -->
+      <div class="g-flow">
+
+        <div class="g-line">
+          <div class="g-dot"></div>
+          <p>Every option becomes a node in a network.</p>
         </div>
 
-        <!-- Decision Theory Card -->
-        <div class="tcard">
-          <h3>Decision Theory</h3>
-          <p>
-            Your choices define a logical system of preferences.
-            We analyze whether your decisions follow consistent reasoning patterns.
-          </p>
-          <a href="#decision-theory" class="tlink">Explore Decision Logic →</a>
+        <div class="g-line">
+          <div class="g-dot"></div>
+          <p>Every preference creates a direction between two nodes.</p>
+        </div>
+
+        <div class="g-line">
+          <div class="g-dot"></div>
+          <p>Stronger choices create stronger connections.</p>
+        </div>
+
+        <div class="g-line">
+          <div class="g-dot"></div>
+          <p>All decisions together form a complete structure.</p>
         </div>
 
       </div>
+
+      <!-- RIGHT VISUAL MOCK -->
+      <div class="g-network">
+  <svg id="demoGraph"></svg>
+</div>
+
     </div>
-  </section>
-  <section class="theory-detail" id="graph-theory">
-    <div class="wrap">
-      <div class="eye">Graph Theory</div>
-      <h2 class="sh">Modeling Preferences as a Network</h2>
 
-      <p class="sd" style="max-width:720px;margin:auto">
-        Your decisions are represented as a directed network. Each option becomes a node,
-        and each preference creates a directional connection between them. This allows us
-        to analyze the structure of your choices mathematically.
-      </p>
+    <div class="g-bottom">
+      This structure allows us to analyze your thinking — not just individual choices,
+      but how they connect and interact as a whole.
+    </div>
 
-      <div class="steps">
+  </div>
+</section>
+<section class="decision-intuition" id="decision-theory">
+  <div class="wrap">
 
-        <!-- Nodes -->
-        <div class="step">
-          <div class="sn">01</div>
-          <h3>Nodes (Options)</h3>
-          <p>
-            Every choice you evaluate is represented as a node in the graph.
-            These nodes form the foundation of your preference system.
-          </p>
-          <div class="formula">V = {All Options}</div>
+    <div class="eye">Decision Theory</div>
+    <h2 class="sh">Your Choices Follow a Hidden Logic</h2>
+
+    <p class="sd d-intro">
+      Every time you choose between two options, you are defining a relationship.
+      These relationships combine to form a complete preference system — whether
+      you realize it or not.
+    </p>
+
+    <div class="d-visual">
+
+      <!-- LEFT SIDE FLOW -->
+      <div class="d-flow">
+
+        <div class="d-line">
+          <div class="d-dot"></div>
+          <p>Choosing A over B defines a preference.</p>
         </div>
 
-        <!-- Edges -->
-        <div class="step">
-          <div class="sn">02</div>
-          <h3>Directed Edges (Preferences)</h3>
-          <p>
-            When you prefer one option over another, a directed edge is created.
-            The direction shows which option is preferred.
-          </p>
-          <div class="formula">A → B (A preferred over B)</div>
+        <div class="d-line">
+          <div class="d-dot"></div>
+          <p>All your choices combine into a ranking of options.</p>
         </div>
 
-        <!-- Weights -->
-        <div class="step">
-          <div class="sn">03</div>
-          <h3>Weights (Strength)</h3>
-          <p>
-            Each preference has a weight representing how strong your choice is.
-            Stronger preferences create more influential connections.
-          </p>
-          <div class="formula">w ∈ {0.25, 0.5, 0.75, 1.0}</div>
+        <div class="d-line">
+          <div class="d-dot"></div>
+          <p>Logical consistency requires these rankings to align.</p>
         </div>
 
-        <!-- Cycles -->
-        <div class="step">
-          <div class="sn">04</div>
-          <h3>Cycles (Inconsistency)</h3>
-          <p>
-            A cycle occurs when preferences loop back to the starting point.
-            This indicates a contradiction in your decision system.
-          </p>
-          <div class="formula">A → B → C → A</div>
-        </div>
-
-        <!-- Graph Model -->
-        <div class="step">
-          <div class="sn">05</div>
-          <h3>Complete Graph Model</h3>
-          <p>
-            All your choices together form a directed weighted graph that we analyze
-            to detect patterns and inconsistencies.
-          </p>
-          <div class="formula">G = (V, E, w)</div>
+        <div class="d-line">
+          <div class="d-dot"></div>
+          <p>When they don’t, contradictions emerge.</p>
         </div>
 
       </div>
+
+      <!-- RIGHT SIDE INTERACTIVE EXAMPLE -->
+      <div class="d-example">
+
+        <div class="choice-row">
+          <span class="opt">A</span>
+          <span class="arrow">›</span>
+          <span class="opt">B</span>
+        </div>
+
+        <div class="choice-row">
+          <span class="opt">B</span>
+          <span class="arrow">›</span>
+          <span class="opt">C</span>
+        </div>
+
+        <div class="choice-row highlight">
+          <span class="opt">C</span>
+          <span class="arrow">›</span>
+          <span class="opt">A</span>
+        </div>
+
+        <div class="d-note">
+          This creates a loop — your preferences contradict each other.
+        </div>
+
+      </div>
+
     </div>
-  </section>
+
+    <div class="d-bottom">
+      A consistent decision system forms a clear order. When loops appear,
+      it means your choices cannot be logically satisfied at the same time.
+    </div>
+
+  </div>
+</section>
+  <section class="bias-flow" id="bias-flow">
+  <div class="wrap">
+
+    <div class="eye">Computation Flow</div>
+    <h2 class="sh">How Bias is Computed</h2>
+
+    <p class="sd" style="max-width:720px;margin:auto">
+      The system transforms your decisions into a mathematical graph and applies
+      algorithmic analysis to detect inconsistencies and quantify their strength.
+    </p>
+
+    <div class="flow-line">
+
+      <!-- STEP 1 -->
+      <div class="flow-step">
+        <div class="fhead">01 · Input Encoding</div>
+        <div class="fcontent">
+          Each choice becomes a directed relation:
+          <div class="feq">A ≻ B → edge(A → B)</div>
+
+          Weight assignment:
+          <div class="feq">w ∈ {0.25, 0.5, 0.75, 1.0}</div>
+        </div>
+      </div>
+
+      <!-- CONNECTOR -->
+      <div class="fconnector"></div>
+
+      <!-- STEP 2 -->
+      <div class="flow-step">
+        <div class="fhead">02 · Graph Model</div>
+        <div class="fcontent">
+          Preferences form a directed weighted graph:
+          <div class="feq">G = (V, E, w)</div>
+
+          Where:
+          <div class="feq">E = {(A,B) | A ≻ B}</div>
+        </div>
+      </div>
+
+      <div class="fconnector"></div>
+
+      <!-- STEP 3 -->
+      <div class="flow-step">
+        <div class="fhead">03 · Consistency Rule</div>
+        <div class="fcontent">
+          Rationality requires transitivity:
+          <div class="feq">A ≻ B ∧ B ≻ C ⇒ A ≻ C</div>
+        </div>
+      </div>
+
+      <div class="fconnector"></div>
+
+      <!-- STEP 4 -->
+      <div class="flow-step">
+        <div class="fhead">04 · Cycle Detection</div>
+        <div class="fcontent">
+          Bias exists if a cycle is found:
+          <div class="feq">A → B → C → A</div>
+
+          Algorithm:
+          <div class="feq">Cycles = simple_cycles(G)</div>
+        </div>
+      </div>
+
+      <div class="fconnector"></div>
+
+      <!-- STEP 5 -->
+      <div class="flow-step">
+        <div class="fhead">05 · Bias Formula</div>
+        <div class="fcontent">
+          For a cycle of length k:
+          <div class="feq">
+            Bias = (1/k) Σ w(eᵢ)
+          </div>
+
+          Overall bias:
+          <div class="feq">
+            Bias = 1 if cycles > 0 else 0
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
 
   <div class="div"></div>
 
@@ -271,62 +492,62 @@
     </div>
   </section>
   <section class="team-section" id="team">
-  <div class="wrap">
-    <div class="eye">Team</div>
-    <h2 class="sh">People Behind the System</h2>
-    <p class="sd" style="max-width:720px;margin:auto">
-      A collaborative effort combining frontend engineering, backend systems, 
-      and mathematical modeling to build a decision analysis platform.
-    </p>
+    <div class="wrap">
+      <div class="eye">Team</div>
+      <h2 class="sh">People Behind the System</h2>
+      <p class="sd" style="max-width:720px;margin:auto">
+        A collaborative effort combining frontend engineering, backend systems,
+        and mathematical modeling to build a decision analysis platform.
+      </p>
 
-    <div class="team-grid">
+      <div class="team-grid">
 
-      <!-- Member 1 -->
-      <div class="team-card">
-        <h3>Pirate</h3>
-        <div class="role">Frontend & Graph Visualization</div>
-        <p>
-          Built the complete interactive interface, including the quiz system and 
-          real-time preference tracking. Implemented D3.js-based graph visualization 
-          to dynamically render nodes, weighted edges, and highlight cycles.
-        </p>
+        <!-- Member 1 -->
+        <div class="team-card">
+          <h3>Tanishq Gupta</h3>
+          <div class="role">Frontend & Graph Visualization</div>
+          <p>
+            Built the complete interactive interface, including the quiz system and
+            real-time preference tracking. Implemented D3.js-based graph visualization
+            to dynamically render nodes, weighted edges, and highlight cycles.
+          </p>
+        </div>
+
+        <!-- Member 2 -->
+        <div class="team-card">
+          <h3>Vishavpreet Singh</h3>
+          <div class="role">Backend & System Integration</div>
+          <p>
+            Developed the Flask backend, implemented graph construction and cycle
+            detection using NetworkX, and handled API integration between frontend
+            and backend. Also contributed final UI refinements.
+          </p>
+        </div>
+
+        <!-- Member 3 -->
+        <div class="team-card">
+          <h3>Vansh Yadav</h3>
+          <div class="role">Research & Mathematical Modeling</div>
+          <p>
+            Worked on the theoretical foundation including graph theory and decision
+            theory concepts. Helped define bias metrics and ensured correctness of
+            the analytical model.
+          </p>
+        </div>
+
+        <!-- Member 4 -->
+        <div class="team-card">
+          <h3>Bharat </h3>
+          <div class="role">UI/UX & Testing</div>
+          <p>
+            Focused on user experience, interface consistency, and usability testing.
+            Ensured smooth interaction flow and clarity in data presentation.
+          </p>
+        </div>
+
       </div>
-
-      <!-- Member 2 -->
-      <div class="team-card">
-        <h3>Member Name</h3>
-        <div class="role">Backend & System Integration</div>
-        <p>
-          Developed the Flask backend, implemented graph construction and cycle 
-          detection using NetworkX, and handled API integration between frontend 
-          and backend. Also contributed final UI refinements.
-        </p>
-      </div>
-
-      <!-- Member 3 -->
-      <div class="team-card">
-        <h3>Member Name</h3>
-        <div class="role">Research & Mathematical Modeling</div>
-        <p>
-          Worked on the theoretical foundation including graph theory and decision 
-          theory concepts. Helped define bias metrics and ensured correctness of 
-          the analytical model.
-        </p>
-      </div>
-
-      <!-- Member 4 -->
-      <div class="team-card">
-        <h3>Member Name</h3>
-        <div class="role">UI/UX & Testing</div>
-        <p>
-          Focused on user experience, interface consistency, and usability testing. 
-          Ensured smooth interaction flow and clarity in data presentation.
-        </p>
-      </div>
-
     </div>
-  </div>
-</section>
+  </section>
 
   <footer>BiasGraph — Preference Cycle Detection · <em>Cognitive inconsistency, measured.</em></footer>
 
@@ -649,6 +870,122 @@
     }
 
     renderQ();
+    //new
+function drawDemoGraph() {
+  const svg = d3.select("#demoGraph");
+  svg.selectAll("*").remove();
+
+  const width = 260;
+  const height = 260;
+
+  svg.attr("viewBox", `0 0 ${width} ${height}`);
+
+  // ── DATA ─────────────────────────
+  const nodes = [
+    { id: "A" },
+    { id: "B" },
+    { id: "C" }
+  ];
+
+  const links = [
+    { source: "A", target: "B", weight: 0.8 },
+    { source: "B", target: "C", weight: 0.7 },
+    { source: "C", target: "A", weight: 0.9 }
+  ];
+
+  // ── ARROW MARKER ─────────────────
+  const defs = svg.append("defs");
+
+  defs.append("marker")
+    .attr("id", "arrow")
+    .attr("viewBox", "0 -5 10 10")
+    .attr("refX", 18)
+    .attr("refY", 0)
+    .attr("markerWidth", 5)
+    .attr("markerHeight", 5)
+    .attr("orient", "auto")
+    .append("path")
+    .attr("d", "M0,-5L10,0L0,5")
+    .attr("fill", "#f06060");
+
+  // ── SIMULATION ───────────────────
+  const sim = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).id(d => d.id).distance(90))
+    .force("charge", d3.forceManyBody().strength(-250))
+    .force("center", d3.forceCenter(width / 2, height / 2))
+    .force("collision", d3.forceCollide().radius(22));
+
+  // ── EDGES ────────────────────────
+  const link = svg.append("g")
+    .selectAll("line")
+    .data(links)
+    .join("line")
+    .attr("stroke", "#f06060")
+    .attr("stroke-width", d => 1 + d.weight * 2)
+    .attr("stroke-opacity", 0.7)
+    .attr("marker-end", "url(#arrow)");
+
+  // ── NODES ────────────────────────
+  const node = svg.append("g")
+    .selectAll("circle")
+    .data(nodes)
+    .join("circle")
+    .attr("r", 11)
+    .attr("fill", "#9d7ff4")
+    .style("cursor", "grab");
+
+  // ── DRAG (FIXED VERSION) ─────────
+  node.call(
+    d3.drag()
+      .on("start", (event, d) => {
+        if (!event.active) sim.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+      })
+      .on("drag", (event, d) => {
+        d.fx = event.x;
+        d.fy = event.y;
+      })
+      .on("end", (event, d) => {
+        if (!event.active) sim.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+      })
+  );
+
+  // ── LABELS ───────────────────────
+  const labels = svg.append("g")
+    .selectAll("text")
+    .data(nodes)
+    .join("text")
+    .text(d => d.id)
+    .attr("font-size", 11)
+    .attr("fill", "#ddd")
+    .attr("text-anchor", "middle")
+    .attr("dy", 4)
+    .attr("pointer-events", "none");
+
+  // ── TICK ─────────────────────────
+  sim.on("tick", () => {
+    link
+      .attr("x1", d => d.source.x)
+      .attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x)
+      .attr("y2", d => d.target.y);
+
+    node
+      .attr("cx", d => d.x)
+      .attr("cy", d => d.y);
+
+    labels
+      .attr("x", d => d.x)
+      .attr("y", d => d.y);
+  });
+}
+
+// Run after load
+drawDemoGraph();
+  
   </script>
 </body>
 
