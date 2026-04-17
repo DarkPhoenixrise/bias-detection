@@ -1,450 +1,1016 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Bias Detection — Preference Cycles</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
-<link rel="stylesheet" href="/static/style.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bias Detection — Preference Cycles</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <link rel="stylesheet" href="/static/style.css" />
 </head>
+
 <body>
-<div class="tip" id="tip"></div>
+  <div class="tip" id="tip"></div>
 
-<nav>
-  <a href="#" class="brand">Bias<em>Graph</em></a>
-  <ul class="navl">
-    <li><a href="#how">Method</a></li>
-    <li><a href="#quiz">Assessment</a></li>
-  </ul>
-</nav>
+  <nav>
+    <a href="#" class="brand">Bias<em>Graph</em></a>
+    <ul class="navl">
 
-<!-- HERO -->
-<section class="hero">
-  <div class="dots"></div>
-  <div class="tag"><div class="blink"></div>Preference Cycle Detection</div>
-  <h1>Bias Detection Model</h1>
-  <p class="hsub">You compare options pairwise. Each preference becomes a weighted directed edge. If your choices form a cycle — A beats B, B beats C, but C beats A — that's an inconsistency. We measure it.</p>
-  <div class="ctas">
-  </div>
-</section>
+      <li><a href="#how">Method</a></li>
+      <li><a href="#quiz">Assessment</a></li>
+      <li><a href="#team">Team</a></li>
+    </ul>
+  </nav>
 
-<div class="div"></div>
-
-<!-- HOW -->
-<section class="how-bg" id="how">
-  <div class="wrap">
-    <div class="eye">The Model</div>
-    <h2 class="sh">Preferences as a weighted directed graph</h2>
-    <p class="sd">Every pairwise comparison you make creates an edge. The weight captures intensity. Bias = cycles in the graph.</p>
-    <div class="steps">
-      <div class="step"><div class="sn">01</div><h3>Pairwise Comparisons</h3><p>You're shown two options at a time. Choose which you prefer, and rate how strongly. No right answers — just your genuine preference.</p></div>
-      <div class="step"><div class="sn">02</div><h3>Directed Weighted Graph</h3><p>Each choice A over B becomes a directed edge A → B. The intensity (0.25–1.0) is the edge weight. All comparisons build up a complete preference network.</p><p><strong>Weight Formula:</strong> Slight = 0.25, Moderate = 0.5, Strong = 0.75, Decisive = 1.0</p></div>
-      <div class="step"><div class="sn">03</div><h3>Cycle Detection</h3><p>A rational preference order has no cycles. If A > B > C but also C > A, you have a cycle — a logical contradiction. We find all such cycles using DFS.</p></div>
-      <div class="step"><div class="sn">04</div><h3>Bias Extent</h3><p>For each cycle, the bias extent = average weight of the edges in the cycle. A cycle of strong preferences is a stronger bias than one of weak, uncertain choices.</p></div>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="dots"></div>
+    <div class="tag">
+      <div class="blink"></div>Preference Cycle Detection
     </div>
-  </div>
-</section>
-
-<div class="div"></div>
-
-<!-- QUIZ -->
-<section id="quiz">
-  <div class="wrap">
-    <div style="text-align:center">
-      <div class="eye">Interactive Assessment</div>
-      <h2 class="sh">Compare the options</h2>
-      <p class="sd" style="margin:0 auto">Pick whichever you genuinely prefer. Rate how strongly. Your preference graph will be built and analysed automatically.</p>
+    <h1>Bias Detection Model</h1>
+    <p class="hsub">You compare options pairwise. Each preference becomes a weighted directed edge. If your choices form
+      a cycle — A beats B, B beats C, but C beats A — that's an inconsistency. We measure it.</p>
+    <div class="ctas">
     </div>
+  </section>
 
-    <div class="qwrap">
-      <!-- QUIZ BOX -->
-      <div class="qbox" id="qbox">
-        <div class="pbar"><div class="pfill" id="pfill" style="width:5%"></div></div>
-        <div class="qmeta" id="qmeta">PAIR 1 OF 10</div>
-        <div class="qtxt" id="qtxt"></div>
-        <div class="qhint" id="qhint"></div>
-        <div class="pair">
-          <button class="popt" id="optA" onclick="pick('A')"></button>
-          <div class="pvs">VS</div>
-          <button class="popt" id="optB" onclick="pick('B')"></button>
-        </div>
-        <div class="introw" id="introw">
-          <div class="intlbl">How strong is this preference?</div>
-          <div class="intopts">
-            <button class="ib" onclick="setInt(0.25,this)">Slight</button>
-            <button class="ib" onclick="setInt(0.5,this)">Moderate</button>
-            <button class="ib" onclick="setInt(0.75,this)">Strong</button>
-            <button class="ib" onclick="setInt(1.0,this)">Decisive</button>
-          </div>
-        </div>
-        <div class="qfoot">
-          <span class="qc" id="qc">1 / 10</span>
-          <button class="bnext" id="bnext" onclick="nextQ()">Next →</button>
-        </div>
-      </div>
+  <div class="div"></div>
 
-      <!-- RESULTS -->
-      <div class="rbox" id="rbox">
-        <div class="rhdr">
-          <div>
-            <div class="rtitle" id="rtitle">Preference Graph</div>
-            <div class="rsub" id="rsub"></div>
-          </div>
-          <button class="bredo" onclick="retake()">↺ Retake</button>
+  <!-- WHY THIS MATTERS -->
+  <section class="why-section" id="why">
+    <div class="wrap">
+      <div class="eye">Why It Matters</div>
+      <h2 class="sh">Understanding Your Decisions Beyond Intuition</h2>
+
+      <p class="sd" style="max-width:720px;margin:auto">
+        Human decisions often feel logical, but hidden inconsistencies can exist beneath the surface.
+        This system reveals whether your preferences follow a consistent structure — or if subtle
+        contradictions are shaping your choices.
+      </p>
+
+      <div class="why-grid">
+
+        <!-- Card 1 -->
+        <div class="why-card">
+          <h3>Hidden Inconsistencies</h3>
+          <p>
+            You may prefer A over B and B over C, but still choose C over A.
+            These contradictions are not obvious, yet they influence real-world decisions.
+          </p>
         </div>
 
-        <!-- STATS -->
-        <div class="stats" id="stats"></div>
-
-        <!-- GRAPH -->
-        <div class="gpanel">
-          <div class="gtbar">
-            <span class="gtitle">Preference Network</span>
-            <span class="ghint">Drag nodes · Hover for details · Red = in a cycle</span>
-          </div>
-          <svg id="gc"></svg>
-          <div class="gleg">
-            <div class="li"><div class="ld" style="background:var(--acc)"></div>Normal preference</div>
-            <div class="li"><div class="ld" style="background:var(--dng)"></div>Node in a cycle (bias)</div>
-            <div class="li"><div class="ld" style="width:18px;height:2px;border-radius:0;background:var(--dng)"></div>Cycle edge</div>
-            <div class="li"><div class="ld" style="width:18px;height:1.5px;border-radius:0;background:var(--acc)"></div>Normal edge</div>
-            <div class="li"><span style="font-size:10px;color:var(--mut)">Edge label = weight</span></div>
-          </div>
+        <!-- Card 2 -->
+        <div class="why-card">
+          <h3>Real-World Impact</h3>
+          <p>
+            Inconsistent preferences can lead to poor financial choices, risky decisions,
+            and unstable long-term planning — especially under uncertainty.
+          </p>
         </div>
 
-        <!-- CYCLE PANEL -->
-        <div class="cpanel">
-          <div class="eye" style="margin-bottom:0.3rem">Bias Report</div>
-          <div style="font-family:var(--font);font-size:1.3rem;font-weight:700;margin-bottom:0.3rem" id="biasTitle">Cycle Analysis</div>
-          <div style="color:var(--mut);font-size:0.83rem" id="biasSub"></div>
-          <div class="cycle-list" id="cycleList"></div>
+        <!-- Card 3 -->
+        <div class="why-card">
+          <h3>Beyond Opinion</h3>
+          <p>
+            This is not about what you choose, but how consistently you choose.
+            The system evaluates the structure of your thinking, not your answers.
+          </p>
         </div>
+
+        <!-- Card 4 -->
+        <div class="why-card">
+          <h3>Measurable Rationality</h3>
+          <p>
+            By modeling your preferences as a graph, we can quantify inconsistency
+            and identify patterns that are otherwise invisible.
+          </p>
+        </div>
+
       </div>
     </div>
+  </section>
+  <section class="doc-section" id="documentation">
+  <div class="wrap">
+    <div class="eye">Documentation</div>
+    <h2 class="sh">Project Report</h2>
+    <p class="sd" style="max-width:720px;margin:auto">
+      View the complete research and methodology document.
+    </p>
+
+    <!-- PDF VIEWER -->
+    <div class="doc-viewer">
+      <iframe 
+        src="/static/reportx.pdf#toolbar=0&navpanes=0&scrollbar=0"
+        frameborder="0">
+      </iframe>
+    </div>
+
+    <!-- DOWNLOAD -->
+    <div style="text-align:center;margin-top:20px;">
+      <a href="/static/reportx.pdf" download class="doc-btn">
+        Download PDF
+      </a>
+    </div>
   </div>
 </section>
 
-<footer>BiasGraph — Preference Cycle Detection · <em>Cognitive inconsistency, measured.</em></footer>
 
-<script>
-// ── QUESTIONS ─────────────────────────────────────────────────────────────────
-// 6 options for pairwise comparisons → designed to potentially create cycles
-const OPTIONS = [
-  "Receive $50 immediately",
-  "Receive $80 in 1 month",
-  "Receive $100 in 6 months",
-  "50% chance of $200, 50% chance of $0",
-  "Guaranteed $90",
-  "70% chance of $150, 30% chance of $50"
-];
 
-// Labels for shorter display in explanations
-const OPTION_LABELS = [
-  "Option A: $50 now",
-  "Option B: $80 in 1 month",
-  "Option C: $100 in 6 months",
-  "Option D: 50% chance of $200",
-  "Option E: Guaranteed $90",
-  "Option F: 70% chance of $150"
-];
+  <!-- HOW -->
 
-// All pairwise combos (6 choose 2 = 15), we pick 10
-const PAIRS = [
-  [0,1,"Timing of reward"],
-  [0,2,"Short vs long delay"],
-  [1,2,"Medium vs long delay"],
-  [2,3,"Delayed certain vs risky large"],
-  [0,3,"Immediate small vs risky large"],
-  [1,3,"Delayed medium vs risky large"],
-  [4,5,"Certain medium vs risky medium"],
-  [0,4,"Immediate small vs certain medium"],
-  [1,5,"Delayed medium vs risky medium"],
-  [3,5,"Risky large vs risky medium"],
-];
+  <section class="how-bg" id="how">
+    <div class="wrap">
+      <div class="eye">The Model</div>
+      <h2 class="sh">Preferences as a weighted directed graph</h2>
+      <p class="sd">Every pairwise comparison you make creates an edge. The weight captures intensity. Bias = cycles in
+        the graph.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="sn">01</div>
+          <h3>Pairwise Comparisons</h3>
+          <p>You're shown two options at a time. Choose which you prefer, and rate how strongly. No right answers — just
+            your genuine preference.</p>
+        </div>
+        <div class="step">
+          <div class="sn">02</div>
+          <h3>Directed Weighted Graph</h3>
+          <p>Each choice A over B becomes a directed edge A → B. The intensity (0.25–1.0) is the edge weight. All
+            comparisons build up a complete preference network.</p>
+          <p><strong>Weight Formula:</strong> Slight = 0.25, Moderate = 0.5, Strong = 0.75, Decisive = 1.0</p>
+        </div>
+        <div class="step">
+          <div class="sn">03</div>
+          <h3>Cycle Detection</h3>
+          <p>A rational preference order has no cycles. If A > B > C but also C > A, you have a cycle — a logical
+            contradiction. We find all such cycles using DFS.</p>
+        </div>
+        <div class="step">
+          <div class="sn">04</div>
+          <h3>Bias Extent</h3>
+          <p>For each cycle, the bias extent = average weight of the edges in the cycle. A cycle of strong preferences
+            is a stronger bias than one of weak, uncertain choices.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="theory-intro" id="theory">
+    <div class="wrap">
 
-let cur = 0, chosen = null, intensity = null;
-let edges = []; // {from, to, weight}  (using option labels)
+      <div class="eye">Foundations</div>
+      <h2 class="sh">The Theory Behind the Model</h2>
 
-function renderQ(){
-  const [ai, bi, hint] = PAIRS[cur];
-  const total = PAIRS.length;
-  document.getElementById('qmeta').textContent = `PAIR ${cur+1} OF ${total}`;
-  document.getElementById('qc').textContent = `${cur+1} / ${total}`;
-  document.getElementById('qtxt').textContent = `Which do you prefer?`;
-  document.getElementById('qhint').textContent = hint;
-  document.getElementById('optA').textContent = OPTIONS[ai];
-  document.getElementById('optB').textContent = OPTIONS[bi];
-  document.getElementById('pfill').style.width = `${((cur+1)/total)*100}%`;
-  document.getElementById('optA').className = 'popt';
-  document.getElementById('optB').className = 'popt';
-  document.getElementById('introw').className = 'introw';
-  document.querySelectorAll('.ib').forEach(b => b.classList.remove('on'));
-  document.getElementById('bnext').className = 'bnext';
-  chosen = null; intensity = null;
-}
+      <p class="sd intro-text">
+        This system is built on two fundamental mathematical frameworks that describe how decisions
+        can be structured and analyzed. Together, they allow us to model preferences and detect
+        inconsistencies in a rigorous way.
+      </p>
 
-function pick(side){
-  chosen = side;
-  document.getElementById('optA').className = 'popt' + (side==='A'?' sa':'');
-  document.getElementById('optB').className = 'popt' + (side==='B'?' sb':'');
-  document.getElementById('introw').className = 'introw show';
-}
+      <div class="theory-split">
 
-function setInt(val, el){
-  intensity = val;
-  document.querySelectorAll('.ib').forEach(b => b.classList.remove('on'));
-  el.classList.add('on');
-  if(chosen) document.getElementById('bnext').className = 'bnext on';
-}
+        <!-- LEFT SIDE -->
+        <div class="theory-block">
+          <div class="tlabel">01</div>
+          <h3>Graph Theory</h3>
 
-function nextQ(){
-  if(!chosen || !intensity) return;
-  const [ai, bi] = PAIRS[cur];
-  const winner = OPTIONS[chosen==='A' ? ai : bi];
-  const loser  = OPTIONS[chosen==='A' ? bi : ai];
-  edges.push({from: winner, to: loser, weight: intensity});
-  if(cur < PAIRS.length - 1){ cur++; renderQ(); }
-  else showResults();
-}
+          <p>
+            Your preferences are modeled as a directed network where each option is a node and
+            each decision creates a directional connection between them.
+          </p>
 
-function retake(){
-  cur = 0; edges = [];
-  document.getElementById('qbox').style.display = 'block';
-  document.getElementById('rbox').className = 'rbox';
-  renderQ();
-}
+          <div class="mini-eq">G = (V, E)</div>
 
-// ── CYCLE DETECTION (moved to backend) ─────────────────────────────────────────────────
+          <p class="mut">
+            This structure allows us to analyze relationships between choices and detect
+            patterns such as cycles and dominance.
+          </p>
+        </div>
 
-// ── RESULTS ───────────────────────────────────────────────────────────────────
-function showResults(){
-  document.getElementById('qbox').style.display = 'none';
-  document.getElementById('rbox').className = 'rbox show';
+        <!-- RIGHT SIDE -->
+        <div class="theory-block">
+          <div class="tlabel">02</div>
+          <h3>Decision Theory</h3>
 
-  // Send edges to backend for analysis
-  fetch('/analyze', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({edges: edges})
-  })
-  .then(response => response.json())
-  .then(data => {
-    const cycles = data.cycles;
-    const cycleNodes = new Set(cycles.flatMap(c => c.path));
-    const cycleEdges = new Set();
-    cycles.forEach(c => {
-      for(let i = 0; i < c.path.length; i++){
-        const a = c.path[i], b = c.path[(i+1)%c.path.length];
-        cycleEdges.add(`${a}|||${b}`);
-      }
-    });
+          <p>
+            Your choices define a preference ordering over available options.
+            A rational system must follow logical consistency rules.
+          </p>
 
-    const nodes = data.nodes.map(n => n.id);
-    const avgBias = cycles.length > 0 ? (cycles.reduce((s,c)=>s+c.extent,0)/cycles.length) : 0;
-    const maxBias  = cycles.length > 0 ? Math.max(...cycles.map(c=>c.extent)) : 0;
+          <div class="mini-eq">A ≻ B ∧ B ≻ C ⇒ A ≻ C</div>
 
-    // Title
-    document.getElementById('rtitle').textContent = cycles.length === 0 ? 'No Bias Detected' : `${cycles.length} Preference Cycle${cycles.length>1?'s':''} Found`;
-    document.getElementById('rsub').textContent = `${edges.length} comparisons · ${nodes.length} options · ${cycles.length} inconsistent cycle${cycles.length!==1?'s':''}`;
+          <p class="mut">
+            When this rule is violated, contradictions emerge — which we interpret as bias
+            in the decision process.
+          </p>
+        </div>
 
-    // Stats
-    document.getElementById('stats').innerHTML = `
+      </div>
+
+    </div>
+  </section>
+
+  <section class="graph-intuition" id="graph-theory">
+    <div class="wrap">
+
+      <div class="eye">Graph Theory</div>
+      <h2 class="sh">Think of Your Decisions as a Network</h2>
+
+      <p class="sd g-intro">
+        Instead of isolated choices, imagine every decision you make as part of a connected system.
+        Each option is a point, and every preference you express creates a link between them.
+        Over time, these links form a structure — your personal decision network.
+      </p>
+
+      <div class="g-visual">
+
+        <!-- LEFT TEXT FLOW -->
+        <div class="g-flow">
+
+          <div class="g-line">
+            <div class="g-dot"></div>
+            <p>Every option becomes a node in a network.</p>
+          </div>
+
+          <div class="g-line">
+            <div class="g-dot"></div>
+            <p>Every preference creates a direction between two nodes.</p>
+          </div>
+
+          <div class="g-line">
+            <div class="g-dot"></div>
+            <p>Stronger choices create stronger connections.</p>
+          </div>
+
+          <div class="g-line">
+            <div class="g-dot"></div>
+            <p>All decisions together form a complete structure.</p>
+          </div>
+
+        </div>
+
+        <!-- RIGHT VISUAL MOCK -->
+        <div class="g-network">
+          <svg id="demoGraph"></svg>
+        </div>
+
+      </div>
+
+      <div class="g-bottom">
+        This structure allows us to analyze your thinking — not just individual choices,
+        but how they connect and interact as a whole.
+      </div>
+
+    </div>
+  </section>
+  <section class="decision-intuition" id="decision-theory">
+    <div class="wrap">
+
+      <div class="eye">Decision Theory</div>
+      <h2 class="sh">Your Choices Follow a Hidden Logic</h2>
+
+      <p class="sd d-intro">
+        Every time you choose between two options, you are defining a relationship.
+        These relationships combine to form a complete preference system — whether
+        you realize it or not.
+      </p>
+
+      <div class="d-visual">
+
+        <!-- LEFT SIDE FLOW -->
+        <div class="d-flow">
+
+          <div class="d-line">
+            <div class="d-dot"></div>
+            <p>Choosing A over B defines a preference.</p>
+          </div>
+
+          <div class="d-line">
+            <div class="d-dot"></div>
+            <p>All your choices combine into a ranking of options.</p>
+          </div>
+
+          <div class="d-line">
+            <div class="d-dot"></div>
+            <p>Logical consistency requires these rankings to align.</p>
+          </div>
+
+          <div class="d-line">
+            <div class="d-dot"></div>
+            <p>When they don’t, contradictions emerge.</p>
+          </div>
+
+        </div>
+
+        <!-- RIGHT SIDE INTERACTIVE EXAMPLE -->
+        <div class="d-example">
+
+          <div class="choice-row">
+            <span class="opt">A</span>
+            <span class="arrow">›</span>
+            <span class="opt">B</span>
+          </div>
+
+          <div class="choice-row">
+            <span class="opt">B</span>
+            <span class="arrow">›</span>
+            <span class="opt">C</span>
+          </div>
+
+          <div class="choice-row highlight">
+            <span class="opt">C</span>
+            <span class="arrow">›</span>
+            <span class="opt">A</span>
+          </div>
+
+          <div class="d-note">
+            This creates a loop — your preferences contradict each other.
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="d-bottom">
+        A consistent decision system forms a clear order. When loops appear,
+        it means your choices cannot be logically satisfied at the same time.
+      </div>
+
+    </div>
+  </section>
+  <section class="bias-flow" id="bias-flow">
+    <div class="wrap">
+
+      <div class="eye">Computation Flow</div>
+      <h2 class="sh">How Bias is Computed</h2>
+
+      <p class="sd" style="max-width:720px;margin:auto">
+        The system transforms your decisions into a mathematical graph and applies
+        algorithmic analysis to detect inconsistencies and quantify their strength.
+      </p>
+
+      <div class="flow-line">
+
+        <!-- STEP 1 -->
+        <div class="flow-step">
+          <div class="fhead">01 · Input Encoding</div>
+          <div class="fcontent">
+            Each choice becomes a directed relation:
+            <div class="feq">A ≻ B → edge(A → B)</div>
+
+            Weight assignment:
+            <div class="feq">w ∈ {0.25, 0.5, 0.75, 1.0}</div>
+          </div>
+        </div>
+
+        <!-- CONNECTOR -->
+        <div class="fconnector"></div>
+
+        <!-- STEP 2 -->
+        <div class="flow-step">
+          <div class="fhead">02 · Graph Model</div>
+          <div class="fcontent">
+            Preferences form a directed weighted graph:
+            <div class="feq">G = (V, E, w)</div>
+
+            Where:
+            <div class="feq">E = {(A,B) | A ≻ B}</div>
+          </div>
+        </div>
+
+        <div class="fconnector"></div>
+
+        <!-- STEP 3 -->
+        <div class="flow-step">
+          <div class="fhead">03 · Consistency Rule</div>
+          <div class="fcontent">
+            Rationality requires transitivity:
+            <div class="feq">A ≻ B ∧ B ≻ C ⇒ A ≻ C</div>
+          </div>
+        </div>
+
+        <div class="fconnector"></div>
+
+        <!-- STEP 4 -->
+        <div class="flow-step">
+          <div class="fhead">04 · Cycle Detection</div>
+          <div class="fcontent">
+            Bias exists if a cycle is found:
+            <div class="feq">A → B → C → A</div>
+
+            Algorithm:
+            <div class="feq">Cycles = simple_cycles(G)</div>
+          </div>
+        </div>
+
+        <div class="fconnector"></div>
+
+        <!-- STEP 5 -->
+        <div class="flow-step">
+          <div class="fhead">05 · Bias Formula</div>
+          <div class="fcontent">
+            For a cycle of length k:
+            <div class="feq">
+              Bias = (1/k) Σ w(eᵢ)
+            </div>
+
+            Overall bias:
+            <div class="feq">
+              Bias = 1 if cycles > 0 else 0
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <div class="div"></div>
+
+  <!-- QUIZ -->
+  <section id="quiz">
+    <div class="wrap">
+      <div style="text-align:center">
+        <div class="eye">Interactive Assessment</div>
+        <h2 class="sh">Compare the options</h2>
+        <p class="sd" style="margin:0 auto">Pick whichever you genuinely prefer. Rate how strongly. Your preference
+          graph will be built and analysed automatically.</p>
+      </div>
+
+      <div class="qwrap">
+        <!-- QUIZ BOX -->
+        <div class="qbox" id="qbox">
+          <div class="pbar">
+            <div class="pfill" id="pfill" style="width:5%"></div>
+          </div>
+          <div class="qmeta" id="qmeta">PAIR 1 OF 10</div>
+          <div class="qtxt" id="qtxt"></div>
+          <div class="qhint" id="qhint"></div>
+          <div class="pair">
+            <button class="popt" id="optA" onclick="pick('A')"></button>
+            <div class="pvs">VS</div>
+            <button class="popt" id="optB" onclick="pick('B')"></button>
+          </div>
+          <div class="introw" id="introw">
+            <div class="intlbl">How strong is this preference?</div>
+            <div class="intopts">
+              <button class="ib" onclick="setInt(0.25,this)">Slight</button>
+              <button class="ib" onclick="setInt(0.5,this)">Moderate</button>
+              <button class="ib" onclick="setInt(0.75,this)">Strong</button>
+              <button class="ib" onclick="setInt(1.0,this)">Decisive</button>
+            </div>
+          </div>
+          <div class="qfoot">
+            <span class="qc" id="qc">1 / 10</span>
+            <button class="bnext" id="bnext" onclick="nextQ()">Next →</button>
+          </div>
+        </div>
+
+        <!-- RESULTS -->
+        <div class="rbox" id="rbox">
+          <div class="rhdr">
+            <div>
+              <div class="rtitle" id="rtitle">Preference Graph</div>
+              <div class="rsub" id="rsub"></div>
+            </div>
+            <button class="bredo" onclick="retake()">↺ Retake</button>
+          </div>
+
+          <!-- STATS -->
+          <div class="stats" id="stats"></div>
+
+          <!-- GRAPH -->
+          <div class="gpanel">
+            <div class="gtbar">
+              <span class="gtitle">Preference Network</span>
+              <span class="ghint">Drag nodes · Hover for details · Red = in a cycle</span>
+            </div>
+            <svg id="gc"></svg>
+            <div class="gleg">
+              <div class="li">
+                <div class="ld" style="background:var(--acc)"></div>Normal preference
+              </div>
+              <div class="li">
+                <div class="ld" style="background:var(--dng)"></div>Node in a cycle (bias)
+              </div>
+              <div class="li">
+                <div class="ld" style="width:18px;height:2px;border-radius:0;background:var(--dng)"></div>Cycle edge
+              </div>
+              <div class="li">
+                <div class="ld" style="width:18px;height:1.5px;border-radius:0;background:var(--acc)"></div>Normal edge
+              </div>
+              <div class="li"><span style="font-size:10px;color:var(--mut)">Edge label = weight</span></div>
+            </div>
+          </div>
+
+          <!-- CYCLE PANEL -->
+          <div class="cpanel">
+            <div class="eye" style="margin-bottom:0.3rem">Bias Report</div>
+            <div style="font-family:var(--font);font-size:1.3rem;font-weight:700;margin-bottom:0.3rem" id="biasTitle">
+              Cycle Analysis</div>
+            <div style="color:var(--mut);font-size:0.83rem" id="biasSub"></div>
+            <div class="cycle-list" id="cycleList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="team-section" id="team">
+    <div class="wrap">
+      <div class="eye">Team</div>
+      <h2 class="sh">People Behind the System</h2>
+      <p class="sd" style="max-width:720px;margin:auto">
+        A collaborative effort combining frontend engineering, backend systems,
+        and mathematical modeling to build a decision analysis platform.
+      </p>
+
+      <div class="team-grid">
+
+        <!-- Member 1 -->
+        <div class="team-card">
+          <h3>Tanishq Gupta</h3>
+          <div class="role">Frontend & Graph Visualization</div>
+          <p>
+            Developed the Flask backend, implemented graph construction and cycle
+            detection using NetworkX, and handled API integration between frontend
+            and backend. Also contributed final UI refinements.
+          </p>
+        </div>
+
+        <!-- Member 2 -->
+        <div class="team-card">
+          <h3>Vishavpreet Singh</h3>
+          <div class="role">Backend & System Integration</div>
+          <p>
+            Built the complete interactive interface, including the quiz system and
+            real-time preference tracking. Implemented D3.js-based graph visualization
+            to dynamically render nodes, weighted edges, and highlight cycles.
+          </p>
+        </div>
+
+        <!-- Member 3 -->
+        <div class="team-card">
+          <h3>Vansh Yadav</h3>
+          <div class="role">Research & Documentation Lead</div>
+          <p>
+            Responsible for conducting an in-depth literature survey to support the project's conceptual foundation.
+            Manages the compilation and organization of references, research papers, and resources, while ensuring
+            accurate and structured documentation of the model and its underlying methodologies.
+          </p>
+        </div>
+
+        <!-- Member 4 -->
+        <div class="team-card">
+          <h3>A Bharath Kumar Reddy </h3>
+          <div class="role">Presentation & Reporting Lead</div>
+          <p>
+            Responsible for preparing comprehensive project reports and designing clear, engaging presentations (PPT)
+            to effectively communicate the model’s concepts, methodology, and outcomes.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer>BiasGraph — Preference Cycle Detection · <em>Cognitive inconsistency, measured.</em></footer>
+
+  <script>
+    // ── QUESTIONS ─────────────────────────────────────────────────────────────────
+    // 6 options for pairwise comparisons → designed to potentially create cycles
+    const OPTIONS = [
+      "Receive $50 immediately",
+      "Receive $80 in 1 month",
+      "Receive $100 in 6 months",
+      "50% chance of $200, 50% chance of $0",
+      "Guaranteed $90",
+      "70% chance of $150, 30% chance of $50"
+    ];
+
+    // Labels for shorter display in explanations
+    const OPTION_LABELS = [
+      "Option A: $50 now",
+      "Option B: $80 in 1 month",
+      "Option C: $100 in 6 months",
+      "Option D: 50% chance of $200",
+      "Option E: Guaranteed $90",
+      "Option F: 70% chance of $150"
+    ];
+
+    // All pairwise combos (6 choose 2 = 15), we pick 10
+    const PAIRS = [
+      [0, 1, "Timing of reward"],
+      [0, 2, "Short vs long delay"],
+      [1, 2, "Medium vs long delay"],
+      [2, 3, "Delayed certain vs risky large"],
+      [0, 3, "Immediate small vs risky large"],
+      [1, 3, "Delayed medium vs risky large"],
+      [4, 5, "Certain medium vs risky medium"],
+      [0, 4, "Immediate small vs certain medium"],
+      [1, 5, "Delayed medium vs risky medium"],
+      [3, 5, "Risky large vs risky medium"],
+    ];
+
+    let cur = 0, chosen = null, intensity = null;
+    let edges = []; // {from, to, weight}  (using option labels)
+
+    function renderQ() {
+      const [ai, bi, hint] = PAIRS[cur];
+      const total = PAIRS.length;
+      document.getElementById('qmeta').textContent = `PAIR ${cur + 1} OF ${total}`;
+      document.getElementById('qc').textContent = `${cur + 1} / ${total}`;
+      document.getElementById('qtxt').textContent = `Which do you prefer?`;
+      document.getElementById('qhint').textContent = hint;
+      document.getElementById('optA').textContent = OPTIONS[ai];
+      document.getElementById('optB').textContent = OPTIONS[bi];
+      document.getElementById('pfill').style.width = `${((cur + 1) / total) * 100}%`;
+      document.getElementById('optA').className = 'popt';
+      document.getElementById('optB').className = 'popt';
+      document.getElementById('introw').className = 'introw';
+      document.querySelectorAll('.ib').forEach(b => b.classList.remove('on'));
+      document.getElementById('bnext').className = 'bnext';
+      chosen = null; intensity = null;
+    }
+
+    function pick(side) {
+      chosen = side;
+      document.getElementById('optA').className = 'popt' + (side === 'A' ? ' sa' : '');
+      document.getElementById('optB').className = 'popt' + (side === 'B' ? ' sb' : '');
+      document.getElementById('introw').className = 'introw show';
+    }
+
+    function setInt(val, el) {
+      intensity = val;
+      document.querySelectorAll('.ib').forEach(b => b.classList.remove('on'));
+      el.classList.add('on');
+      if (chosen) document.getElementById('bnext').className = 'bnext on';
+    }
+
+    function nextQ() {
+      if (!chosen || !intensity) return;
+      const [ai, bi] = PAIRS[cur];
+      const winner = OPTIONS[chosen === 'A' ? ai : bi];
+      const loser = OPTIONS[chosen === 'A' ? bi : ai];
+      edges.push({ from: winner, to: loser, weight: intensity });
+      if (cur < PAIRS.length - 1) { cur++; renderQ(); }
+      else showResults();
+    }
+
+    function retake() {
+      cur = 0; edges = [];
+      document.getElementById('qbox').style.display = 'block';
+      document.getElementById('rbox').className = 'rbox';
+      renderQ();
+    }
+
+    // ── CYCLE DETECTION (moved to backend) ─────────────────────────────────────────────────
+
+    // ── RESULTS ───────────────────────────────────────────────────────────────────
+    function showResults() {
+      document.getElementById('qbox').style.display = 'none';
+      document.getElementById('rbox').className = 'rbox show';
+
+      // Send edges to backend for analysis
+      fetch('/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ edges: edges })
+      })
+        .then(response => response.json())
+        .then(data => {
+          const cycles = data.cycles;
+          const cycleNodes = new Set(cycles.flatMap(c => c.path));
+          const cycleEdges = new Set();
+          cycles.forEach(c => {
+            for (let i = 0; i < c.path.length; i++) {
+              const a = c.path[i], b = c.path[(i + 1) % c.path.length];
+              cycleEdges.add(`${a}|||${b}`);
+            }
+          });
+
+          const nodes = data.nodes.map(n => n.id);
+          const avgBias = cycles.length > 0 ? (cycles.reduce((s, c) => s + c.extent, 0) / cycles.length) : 0;
+          const maxBias = cycles.length > 0 ? Math.max(...cycles.map(c => c.extent)) : 0;
+
+          // Title
+          document.getElementById('rtitle').textContent = cycles.length === 0 ? 'No Bias Detected' : `${cycles.length} Preference Cycle${cycles.length > 1 ? 's' : ''} Found`;
+          document.getElementById('rsub').textContent = `${edges.length} comparisons · ${nodes.length} options · ${cycles.length} inconsistent cycle${cycles.length !== 1 ? 's' : ''}`;
+
+          // Stats
+          document.getElementById('stats').innerHTML = `
       <div class="stat"><div class="sv a">${edges.length}</div><div class="sl">Pairwise comparisons</div></div>
-      <div class="stat"><div class="sv ${cycles.length===0?'g':'r'}">${cycles.length}</div><div class="sl">Preference cycles (bias)</div></div>
-      <div class="stat"><div class="sv w">${(avgBias*100).toFixed(0)}%</div><div class="sl">Avg cycle bias extent</div></div>
-      <div class="stat"><div class="sv ${maxBias>0.7?'r':maxBias>0.4?'w':'g'}">${(maxBias*100).toFixed(0)}%</div><div class="sl">Max single cycle extent</div></div>
+      <div class="stat"><div class="sv ${cycles.length === 0 ? 'g' : 'r'}">${cycles.length}</div><div class="sl">Preference cycles (bias)</div></div>
+      <div class="stat"><div class="sv w">${(avgBias * 100).toFixed(0)}%</div><div class="sl">Avg cycle bias extent</div></div>
+      <div class="stat"><div class="sv ${maxBias > 0.7 ? 'r' : maxBias > 0.4 ? 'w' : 'g'}">${(maxBias * 100).toFixed(0)}%</div><div class="sl">Max single cycle extent</div></div>
     `;
 
-    drawGraph(nodes, data.edges, cycleNodes, cycleEdges);
-    renderCycles(cycles);
-  });
-}
+          drawGraph(nodes, data.edges, cycleNodes, cycleEdges);
+          renderCycles(cycles);
+        });
+    }
 
-// ── DRAW FORCE GRAPH ──────────────────────────────────────────────────────────
-function drawGraph(nodes, edgeData, cycleNodes, cycleEdgeKeys){
-  const svg = d3.select('#gc');
-  svg.selectAll('*').remove();
-  const el = document.getElementById('gc');
-  const W = el.clientWidth || 680;
-  const H = 460;
-  svg.attr('viewBox',`0 0 ${W} ${H}`).attr('width',W).attr('height',H);
+    // ── DRAW FORCE GRAPH ──────────────────────────────────────────────────────────
+    function drawGraph(nodes, edgeData, cycleNodes, cycleEdgeKeys) {
+      const svg = d3.select('#gc');
+      svg.selectAll('*').remove();
+      const el = document.getElementById('gc');
+      const W = el.clientWidth || 680;
+      const H = 460;
+      svg.attr('viewBox', `0 0 ${W} ${H}`).attr('width', W).attr('height', H);
 
-  const tip = document.getElementById('tip');
+      const tip = document.getElementById('tip');
 
-  // Deduplicate edges (sum weights if same pair appears via multiple paths)
-  const edgeMap = {};
-  edgeData.forEach(e => {
-    const k = `${e.from}|||${e.to}`;
-    if(!edgeMap[k]) edgeMap[k] = {source:e.from, target:e.to, weight:0, n:0};
-    edgeMap[k].weight += e.weight; edgeMap[k].n++;
-  });
-  const links = Object.values(edgeMap).map(e => ({...e, weight: e.weight/e.n}));
+      // Deduplicate edges (sum weights if same pair appears via multiple paths)
+      const edgeMap = {};
+      edgeData.forEach(e => {
+        const k = `${e.from}|||${e.to}`;
+        if (!edgeMap[k]) edgeMap[k] = { source: e.from, target: e.to, weight: 0, n: 0 };
+        edgeMap[k].weight += e.weight; edgeMap[k].n++;
+      });
+      const links = Object.values(edgeMap).map(e => ({ ...e, weight: e.weight / e.n }));
 
-  const nodeObjs = nodes.map(id => ({id, inCycle: cycleNodes.has(id)}));
+      const nodeObjs = nodes.map(id => ({ id, inCycle: cycleNodes.has(id) }));
 
-  // Degrees for sizing
-  const inD = {}, outD = {};
-  nodes.forEach(n => { inD[n]=0; outD[n]=0; });
-  edgeData.forEach(e => { inD[e.from]=(inD[e.from]||0)+e.weight; });
-  const maxIn = Math.max(...Object.values(inD), 0.01);
+      // Degrees for sizing
+      const inD = {}, outD = {};
+      nodes.forEach(n => { inD[n] = 0; outD[n] = 0; });
+      edgeData.forEach(e => { inD[e.from] = (inD[e.from] || 0) + e.weight; });
+      const maxIn = Math.max(...Object.values(inD), 0.01);
 
-  // Markers
-  const defs = svg.append('defs');
-  [['mnorm','#5a5270'],['mcyc','#f06060'],['mhigh','#9d7ff4']].forEach(([id,col]) => {
-    defs.append('marker').attr('id',id).attr('viewBox','0 -5 10 10')
-      .attr('refX',20).attr('refY',0).attr('markerWidth',5).attr('markerHeight',5).attr('orient','auto')
-      .append('path').attr('d','M0,-5L10,0L0,5').attr('fill',col);
-  });
+      // Markers
+      const defs = svg.append('defs');
+      [['mnorm', '#5a5270'], ['mcyc', '#f06060'], ['mhigh', '#9d7ff4']].forEach(([id, col]) => {
+        defs.append('marker').attr('id', id).attr('viewBox', '0 -5 10 10')
+          .attr('refX', 20).attr('refY', 0).attr('markerWidth', 5).attr('markerHeight', 5).attr('orient', 'auto')
+          .append('path').attr('d', 'M0,-5L10,0L0,5').attr('fill', col);
+      });
 
-  const sim = d3.forceSimulation(nodeObjs)
-    .force('link', d3.forceLink(links).id(d=>d.id).distance(d => 110 + (1-d.weight)*70))
-    .force('charge', d3.forceManyBody().strength(-320))
-    .force('center', d3.forceCenter(W/2, H/2))
-    .force('collision', d3.forceCollide().radius(38));
+      const sim = d3.forceSimulation(nodeObjs)
+        .force('link', d3.forceLink(links).id(d => d.id).distance(d => 110 + (1 - d.weight) * 70))
+        .force('charge', d3.forceManyBody().strength(-320))
+        .force('center', d3.forceCenter(W / 2, H / 2))
+        .force('collision', d3.forceCollide().radius(38));
 
-  const linkG = svg.append('g');
-  const link = linkG.selectAll('line').data(links).join('line')
-    .attr('stroke', d => {
-      const k = `${d.source.id||d.source}|||${d.target.id||d.target}`;
-      return cycleEdgeKeys.has(k) ? '#f06060' : d.weight>0.6 ? '#9d7ff4' : '#3a3850';
-    })
-    .attr('stroke-width', d => 1 + d.weight * 3)
-    .attr('stroke-opacity', d => 0.5 + d.weight * 0.4)
-    .attr('marker-end', d => {
-      const k = `${d.source.id||d.source}|||${d.target.id||d.target}`;
-      return cycleEdgeKeys.has(k) ? 'url(#mcyc)' : d.weight>0.6 ? 'url(#mhigh)' : 'url(#mnorm)';
-    })
-    .on('mousemove', (ev,d) => {
-      const s = d.source.id||d.source, t = d.target.id||d.target;
-      const k = `${s}|||${t}`;
-      const isCyc = cycleEdgeKeys.has(k);
-      tip.style.display='block';
-      tip.style.left=(ev.clientX+14)+'px';
-      tip.style.top=(ev.clientY-10)+'px';
-      tip.innerHTML=`<strong>${s}</strong> → <strong>${t}</strong><br>Weight: <strong>${d.weight.toFixed(2)}</strong>${isCyc?'<br><span style="color:#f06060">⚠ Part of a cycle</span>':''}`;
-    })
-    .on('mouseleave',()=>{tip.style.display='none'});
+      const linkG = svg.append('g');
+      const link = linkG.selectAll('line').data(links).join('line')
+        .attr('stroke', d => {
+          const k = `${d.source.id || d.source}|||${d.target.id || d.target}`;
+          return cycleEdgeKeys.has(k) ? '#f06060' : d.weight > 0.6 ? '#9d7ff4' : '#3a3850';
+        })
+        .attr('stroke-width', d => 1 + d.weight * 3)
+        .attr('stroke-opacity', d => 0.5 + d.weight * 0.4)
+        .attr('marker-end', d => {
+          const k = `${d.source.id || d.source}|||${d.target.id || d.target}`;
+          return cycleEdgeKeys.has(k) ? 'url(#mcyc)' : d.weight > 0.6 ? 'url(#mhigh)' : 'url(#mnorm)';
+        })
+        .on('mousemove', (ev, d) => {
+          const s = d.source.id || d.source, t = d.target.id || d.target;
+          const k = `${s}|||${t}`;
+          const isCyc = cycleEdgeKeys.has(k);
+          tip.style.display = 'block';
+          tip.style.left = (ev.clientX + 14) + 'px';
+          tip.style.top = (ev.clientY - 10) + 'px';
+          tip.innerHTML = `<strong>${s}</strong> → <strong>${t}</strong><br>Weight: <strong>${d.weight.toFixed(2)}</strong>${isCyc ? '<br><span style="color:#f06060">⚠ Part of a cycle</span>' : ''}`;
+        })
+        .on('mouseleave', () => { tip.style.display = 'none' });
 
-  // Edge weight labels
-  const wlabels = svg.append('g').selectAll('text').data(links).join('text')
-    .attr('font-size',10).attr('fill','#4a4760').attr('text-anchor','middle').attr('dy',-4)
-    .text(d => d.weight.toFixed(2));
+      // Edge weight labels
+      const wlabels = svg.append('g').selectAll('text').data(links).join('text')
+        .attr('font-size', 10).attr('fill', '#4a4760').attr('text-anchor', 'middle').attr('dy', -4)
+        .text(d => d.weight.toFixed(2));
 
-  const nodeG = svg.append('g');
-  const node = nodeG.selectAll('g').data(nodeObjs).join('g')
-    .style('cursor','grab')
-    .call(d3.drag()
-      .on('start',(ev,d)=>{ if(!ev.active) sim.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; })
-      .on('drag', (ev,d)=>{ d.fx=ev.x; d.fy=ev.y; })
-      .on('end',  (ev,d)=>{ if(!ev.active) sim.alphaTarget(0); d.fx=null; d.fy=null; })
-    )
-    .on('mousemove',(ev,d)=>{
-      const wins = edgeData.filter(e=>e.from===d.id).length;
-      const losses = edgeData.filter(e=>e.to===d.id).length;
-      tip.style.display='block';
-      tip.style.left=(ev.clientX+14)+'px';
-      tip.style.top=(ev.clientY-10)+'px';
-      tip.innerHTML=`<strong>${d.id}</strong><br>Preferred: ${wins}× &nbsp; Lost to: ${losses}×${d.inCycle?'<br><span style="color:#f06060">⚠ In a preference cycle</span>':''}`;
-    })
-    .on('mouseleave',()=>{tip.style.display='none'});
+      const nodeG = svg.append('g');
+      const node = nodeG.selectAll('g').data(nodeObjs).join('g')
+        .style('cursor', 'grab')
+        .call(d3.drag()
+          .on('start', (ev, d) => { if (!ev.active) sim.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+          .on('drag', (ev, d) => { d.fx = ev.x; d.fy = ev.y; })
+          .on('end', (ev, d) => { if (!ev.active) sim.alphaTarget(0); d.fx = null; d.fy = null; })
+        )
+        .on('mousemove', (ev, d) => {
+          const wins = edgeData.filter(e => e.from === d.id).length;
+          const losses = edgeData.filter(e => e.to === d.id).length;
+          tip.style.display = 'block';
+          tip.style.left = (ev.clientX + 14) + 'px';
+          tip.style.top = (ev.clientY - 10) + 'px';
+          tip.innerHTML = `<strong>${d.id}</strong><br>Preferred: ${wins}× &nbsp; Lost to: ${losses}×${d.inCycle ? '<br><span style="color:#f06060">⚠ In a preference cycle</span>' : ''}`;
+        })
+        .on('mouseleave', () => { tip.style.display = 'none' });
 
-  // Pulse ring for cycle nodes
-  node.filter(d=>d.inCycle).append('circle')
-    .attr('r', 34)
-    .attr('fill','none')
-    .attr('stroke','#f06060')
-    .attr('stroke-width',1)
-    .attr('stroke-opacity',0.25);
+      // Pulse ring for cycle nodes
+      node.filter(d => d.inCycle).append('circle')
+        .attr('r', 34)
+        .attr('fill', 'none')
+        .attr('stroke', '#f06060')
+        .attr('stroke-width', 1)
+        .attr('stroke-opacity', 0.25);
 
-  const r = 24;
-  node.append('circle')
-    .attr('r', r)
-    .attr('fill', d => d.inCycle ? 'rgba(240,96,96,0.12)' : 'rgba(157,127,244,0.1)')
-    .attr('stroke', d => d.inCycle ? '#f06060' : '#9d7ff4')
-    .attr('stroke-width', 1.5);
+      const r = 24;
+      node.append('circle')
+        .attr('r', r)
+        .attr('fill', d => d.inCycle ? 'rgba(240,96,96,0.12)' : 'rgba(157,127,244,0.1)')
+        .attr('stroke', d => d.inCycle ? '#f06060' : '#9d7ff4')
+        .attr('stroke-width', 1.5);
 
-  node.append('text')
-    .attr('text-anchor','middle').attr('dy','0.35em')
-    .attr('font-size', 9.5).attr('font-weight','600')
-    .attr('fill', d => d.inCycle ? '#f09090' : '#b09cf0')
-    .attr('pointer-events','none')
-    .each(function(d){
-      const words = d.id.split(' ');
-      const el = d3.select(this);
-      if(words.length <= 2){
-        el.text(d.id.length > 11 ? d.id.slice(0,10)+'…' : d.id);
-      } else {
-        // two lines
-        el.append('tspan').attr('x',0).attr('dy','-0.6em').text(words.slice(0,Math.ceil(words.length/2)).join(' '));
-        el.append('tspan').attr('x',0).attr('dy','1.2em').text(words.slice(Math.ceil(words.length/2)).join(' '));
-      }
-    });
+      node.append('text')
+        .attr('text-anchor', 'middle').attr('dy', '0.35em')
+        .attr('font-size', 9.5).attr('font-weight', '600')
+        .attr('fill', d => d.inCycle ? '#f09090' : '#b09cf0')
+        .attr('pointer-events', 'none')
+        .each(function (d) {
+          const words = d.id.split(' ');
+          const el = d3.select(this);
+          if (words.length <= 2) {
+            el.text(d.id.length > 11 ? d.id.slice(0, 10) + '…' : d.id);
+          } else {
+            // two lines
+            el.append('tspan').attr('x', 0).attr('dy', '-0.6em').text(words.slice(0, Math.ceil(words.length / 2)).join(' '));
+            el.append('tspan').attr('x', 0).attr('dy', '1.2em').text(words.slice(Math.ceil(words.length / 2)).join(' '));
+          }
+        });
 
-  const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
+      const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
-  sim.on('tick',()=>{
-    link
-      .attr('x1',d=>clamp(d.source.x,r+4,W-r-4))
-      .attr('y1',d=>clamp(d.source.y,r+4,H-r-4))
-      .attr('x2',d=>clamp(d.target.x,r+4,W-r-4))
-      .attr('y2',d=>clamp(d.target.y,r+4,H-r-4));
-    wlabels
-      .attr('x',d=>(d.source.x+d.target.x)/2)
-      .attr('y',d=>(d.source.y+d.target.y)/2);
-    node.attr('transform',d=>`translate(${clamp(d.x,r+6,W-r-6)},${clamp(d.y,r+6,H-r-6)})`);
-  });
-}
+      sim.on('tick', () => {
+        link
+          .attr('x1', d => clamp(d.source.x, r + 4, W - r - 4))
+          .attr('y1', d => clamp(d.source.y, r + 4, H - r - 4))
+          .attr('x2', d => clamp(d.target.x, r + 4, W - r - 4))
+          .attr('y2', d => clamp(d.target.y, r + 4, H - r - 4));
+        wlabels
+          .attr('x', d => (d.source.x + d.target.x) / 2)
+          .attr('y', d => (d.source.y + d.target.y) / 2);
+        node.attr('transform', d => `translate(${clamp(d.x, r + 6, W - r - 6)},${clamp(d.y, r + 6, H - r - 6)})`);
+      });
+    }
 
-// ── RENDER CYCLE CARDS ────────────────────────────────────────────────────────
-function renderCycles(cycles){
-  const list = document.getElementById('cycleList');
-  const title = document.getElementById('biasTitle');
-  const sub = document.getElementById('biasSub');
+    // ── RENDER CYCLE CARDS ────────────────────────────────────────────────────────
+    function renderCycles(cycles) {
+      const list = document.getElementById('cycleList');
+      const title = document.getElementById('biasTitle');
+      const sub = document.getElementById('biasSub');
 
-  // Create label map
-  const labelMap = {};
-  OPTIONS.forEach((opt, i) => labelMap[opt] = OPTION_LABELS[i]);
+      // Create label map
+      const labelMap = {};
+      OPTIONS.forEach((opt, i) => labelMap[opt] = OPTION_LABELS[i]);
 
-  if(cycles.length === 0){
-    title.textContent = 'No Preference Cycles';
-    sub.textContent = 'Your preferences are fully transitive — no inconsistencies detected.';
-    list.innerHTML = `<div class="no-cycles">
+      if (cycles.length === 0) {
+        title.textContent = 'No Preference Cycles';
+        sub.textContent = 'Your preferences are fully transitive — no inconsistencies detected.';
+        list.innerHTML = `<div class="no-cycles">
       <div>✓</div>
       <div>
         <div class="nc-title">Consistent Preference Order</div>
         <div class="nc-desc">A rational agent with no preference cycles. Your choices form a valid total order — every option can be ranked without contradiction.</div>
       </div>
     </div>`;
-    return;
-  }
+        return;
+      }
 
-  title.textContent = `${cycles.length} Cycle${cycles.length>1?'s':''} Detected`;
-  sub.textContent = `Each cycle represents a preference inconsistency. Bias extent = average weight of edges forming the cycle.`;
+      title.textContent = `${cycles.length} Cycle${cycles.length > 1 ? 's' : ''} Detected`;
+      sub.textContent = `Each cycle represents a preference inconsistency. Bias extent = average weight of edges forming the cycle.`;
 
-  // Sort by extent descending
-  cycles.sort((a,b) => b.extent - a.extent);
+      // Sort by extent descending
+      cycles.sort((a, b) => b.extent - a.extent);
 
-  list.innerHTML = cycles.map((c, i) => {
-    const pathStr = [...c.path, c.path[0]].map(n => labelMap[n] || n).join(' → ');
-    const pct = Math.round(c.extent * 100);
-    const lvl = pct > 70 ? 'Strong' : pct > 45 ? 'Moderate' : 'Weak';
-    return `<div class="cyc">
+      list.innerHTML = cycles.map((c, i) => {
+        const pathStr = [...c.path, c.path[0]].map(n => labelMap[n] || n).join(' → ');
+        const pct = Math.round(c.extent * 100);
+        const lvl = pct > 70 ? 'Strong' : pct > 45 ? 'Moderate' : 'Weak';
+        return `<div class="cyc">
       <div class="cyc-top">
-        <div class="cyc-path">Cycle ${i+1}: ${pathStr}</div>
+        <div class="cyc-path">Cycle ${i + 1}: ${pathStr}</div>
         <div class="cyc-badge">${lvl} bias · ${pct}%</div>
       </div>
       <div class="cyc-detail">
         You preferred <em>${labelMap[c.path[0]] || c.path[0]}</em> over <em>${labelMap[c.path[1]] || c.path[1]}</em>,
-        ${c.path.slice(1,-1).map((n,j)=>`<em>${labelMap[n] || n}</em> over <em>${labelMap[c.path[j+2]] || c.path[j+2] || c.path[0]}</em>`).join(', ')},
-        yet also <em>${labelMap[c.path[c.path.length-1]] || c.path[c.path.length-1]}</em> over <em>${labelMap[c.path[0]] || c.path[0]}</em> — forming a contradiction.
+        ${c.path.slice(1, -1).map((n, j) => `<em>${labelMap[n] || n}</em> over <em>${labelMap[c.path[j + 2]] || c.path[j + 2] || c.path[0]}</em>`).join(', ')},
+        yet also <em>${labelMap[c.path[c.path.length - 1]] || c.path[c.path.length - 1]}</em> over <em>${labelMap[c.path[0]] || c.path[0]}</em> — forming a contradiction.
         <br>Bias extent (avg edge weight): <strong>${c.extent.toFixed(3)}</strong>
       </div>
       <div class="cyc-bar-bg"><div class="cyc-bar" style="width:${pct}%"></div></div>
     </div>`;
-  }).join('');
-}
+      }).join('');
+    }
 
-renderQ();
-</script>
+    renderQ();
+    //new
+    function drawDemoGraph() {
+      const svg = d3.select("#demoGraph");
+      svg.selectAll("*").remove();
+
+      const width = 260;
+      const height = 260;
+
+      svg.attr("viewBox", `0 0 ${width} ${height}`);
+
+      // ── DATA ─────────────────────────
+      const nodes = [
+        { id: "A" },
+        { id: "B" },
+        { id: "C" }
+      ];
+
+      const links = [
+        { source: "A", target: "B", weight: 0.8 },
+        { source: "B", target: "C", weight: 0.7 },
+        { source: "C", target: "A", weight: 0.9 }
+      ];
+
+      // ── ARROW MARKER ─────────────────
+      const defs = svg.append("defs");
+
+      defs.append("marker")
+        .attr("id", "arrow")
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 18)
+        .attr("refY", 0)
+        .attr("markerWidth", 5)
+        .attr("markerHeight", 5)
+        .attr("orient", "auto")
+        .append("path")
+        .attr("d", "M0,-5L10,0L0,5")
+        .attr("fill", "#f06060");
+
+      // ── SIMULATION ───────────────────
+      const sim = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(links).id(d => d.id).distance(90))
+        .force("charge", d3.forceManyBody().strength(-250))
+        .force("center", d3.forceCenter(width / 2, height / 2))
+        .force("collision", d3.forceCollide().radius(22));
+
+      // ── EDGES ────────────────────────
+      const link = svg.append("g")
+        .selectAll("line")
+        .data(links)
+        .join("line")
+        .attr("stroke", "#f06060")
+        .attr("stroke-width", d => 1 + d.weight * 2)
+        .attr("stroke-opacity", 0.7)
+        .attr("marker-end", "url(#arrow)");
+
+      // ── NODES ────────────────────────
+      const node = svg.append("g")
+        .selectAll("circle")
+        .data(nodes)
+        .join("circle")
+        .attr("r", 11)
+        .attr("fill", "#9d7ff4")
+        .style("cursor", "grab");
+
+      // ── DRAG (FIXED VERSION) ─────────
+      node.call(
+        d3.drag()
+          .on("start", (event, d) => {
+            if (!event.active) sim.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+          })
+          .on("drag", (event, d) => {
+            d.fx = event.x;
+            d.fy = event.y;
+          })
+          .on("end", (event, d) => {
+            if (!event.active) sim.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+          })
+      );
+
+      // ── LABELS ───────────────────────
+      const labels = svg.append("g")
+        .selectAll("text")
+        .data(nodes)
+        .join("text")
+        .text(d => d.id)
+        .attr("font-size", 11)
+        .attr("fill", "#ddd")
+        .attr("text-anchor", "middle")
+        .attr("dy", 4)
+        .attr("pointer-events", "none");
+
+      // ── TICK ─────────────────────────
+      sim.on("tick", () => {
+        link
+          .attr("x1", d => d.source.x)
+          .attr("y1", d => d.source.y)
+          .attr("x2", d => d.target.x)
+          .attr("y2", d => d.target.y);
+
+        node
+          .attr("cx", d => d.x)
+          .attr("cy", d => d.y);
+
+        labels
+          .attr("x", d => d.x)
+          .attr("y", d => d.y);
+      });
+    }
+
+    // Run after load
+    drawDemoGraph();
+
+  </script>
 </body>
+
 </html>

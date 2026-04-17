@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import networkx as nx
 import json
+#the piratr have done something right now
 
 app = Flask(__name__, template_folder='../frontend', static_folder='../frontend/static')
 
