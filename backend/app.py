@@ -49,4 +49,4 @@ def analyze():
     return jsonify({'nodes': nodes, 'edges': edges_viz, 'cycles': cycles, 'bias': bias})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
