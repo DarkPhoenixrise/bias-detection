@@ -1284,3 +1284,50 @@ footer em {
   border-radius: 8px;
   text-decoration: none;
 }
+.ref-section {
+  padding: 80px 0;
+}
+
+.ref-list {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.ref-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: rgba(255,255,255,0.02);
+  padding: 14px 18px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: 0.2s ease;
+}
+
+.ref-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(157,127,244,0.3);
+}
+
+.ref-num {
+  font-weight: 700;
+  color: var(--acc);
+  min-width: 30px;
+}
+
+.ref-item p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--mut);
+}
+
+.ref-item a {
+  color: var(--acc);
+  text-decoration: none;
+}
+
+.ref-item a:hover {
+  text-decoration: underline;
+}
