@@ -3,7 +3,7 @@
 
 Watch the full demonstration of RoadLens-AI in action:
 
-[![Watch Demo](https://img.youtube.com/vi/3W8ZD5YON2Q/maxresdefault.jpg)]([https://youtu.be/3W8ZD5YON2Q](https://youtu.be/oRjFbTqkHjU))
+[![Watch Demo]([https://img.youtube.com/vi/3W8ZD5YON2Q](https://youtu.be/oRjFbTqkHjU)/maxresdefault.jpg)]([https://youtu.be/3W8ZD5YON2Q](https://youtu.be/oRjFbTqkHjU))
 
 👉 **[Watch on YouTube]([https://youtu.be/3W8ZD5YON2Q](https://youtu.be/oRjFbTqkHjU))**
 
